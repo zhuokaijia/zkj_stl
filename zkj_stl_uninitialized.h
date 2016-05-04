@@ -1,6 +1,6 @@
 /*  NOTE:This is an internal header file,included by other header file.
-*  you should not attempt to use it directly
-*/
+ *  you should not attempt to use it directly
+ */
 
 #include  "zkj_stl_construct.h"
 
