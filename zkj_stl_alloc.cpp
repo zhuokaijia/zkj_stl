@@ -21,7 +21,7 @@ namespace zkj_stl{
     }
 
     void fl_malloc::deallocate(void* _p, size_t _n){
-        obj* temp = reinterpret_cast<obj*>(_p);
+        obj* temp = static_cast<obj*>(_p);
         obj** cur_free_list = free_list + fl_index(_n);
         if (_n > MAX_BYTES){
             general_alloc::deallocate(_p, _n);
@@ -95,6 +95,7 @@ namespace zkj_stl{
 
     char* fl_malloc::head_free = 0 ;
     char* fl_malloc::end_free = 0;
+
 }//namespace zkj_stl
 
 //mode:c++

@@ -12,18 +12,20 @@ namespace zkj_stl{
     // construct()
     template<class T1,class T2>
     inline void construct(T1* _p, const T2& value){
-        new reinterpret_cast<void*>(_p) T1(value);
+        new static_cast<void*>(_p) T1(value);
     }
 
     template<class T>
     inline void construct(T* _p){
-        new reinterpret_cast<void*>(_p)T1();
+        new static_cast<void*>(_p)T1();
     }
 
     // destroy()
     template<class T>
     inline void destroy(T* _p){
-        _p->~T();
+        if (value_type(T) == is_POD){
+            _p->~T();
+        }
     }
 
     template<class FORWARDITERATOR,class T>
@@ -38,6 +40,7 @@ namespace zkj_stl{
         __destroy(first, last);
     }
 
+    // do nothing
     inline void destroy(char*, char*) {}
     inline void destroy(int*, int*) {}
     inline void destroy(long*, long*) {}

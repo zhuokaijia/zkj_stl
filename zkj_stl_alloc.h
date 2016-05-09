@@ -15,10 +15,10 @@ namespace zkj_stl{
     template<class T,class Alloc>
     class simple_alloc{
         static T* allocate(size_t _n){
-            return (0 == _n) ? 0 : reinterpret_cast<T*>(Alloc::allocate(n*sizeof(T));
+            return (0 == _n) ? 0 : static_cast<T*>(Alloc::allocate(n*sizeof(T));
         }
         static T* allocate(){
-            return (0 == _n) ? 0 : reinterpret_cast<T*>(Alloc::allocate(sizeof(T));
+            return (0 == _n) ? 0 : static_cast<T*>(Alloc::allocate(sizeof(T));
         }
         static void deallocate(T* _p, size_t _n){
             if (0 != _n){
@@ -77,13 +77,13 @@ namespace zkj_stl{
         }
 
         static void* refill(size_t _n);
-        static char* chunk_alloc(size_t _n, int& _nobjs);
+        // _nobjs pass by reference
+        static char* chunk_alloc(size_t _n, size_t& _nobjs);
 
         //change in chunk_alloc function
         static char* head_free;
         static char* end_free;
 
-        static size_t size;
     public:
         static void* allocate(size_t _n);
         static void  deallocate(void* _p, size_t _n);
