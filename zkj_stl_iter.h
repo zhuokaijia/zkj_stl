@@ -10,6 +10,17 @@
 
 namespace zkj_stl{
 
+    //basic iterator
+    template<class Category,class T,class Distance=ptrdiff_t,
+             class Pointer = T*,class Reference = T&>
+    struct iterator{
+        typedef Category    Iter_type;
+        typedef T           value_type;
+        typedef Distance    difference_type;
+        typedef Pointer     pointer;
+        typedef Reference   reference;
+    };
+
     //for argument deducation
     struct IIter_tag {};
     struct OIter_tag {};
