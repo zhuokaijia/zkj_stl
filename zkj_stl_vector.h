@@ -178,10 +178,10 @@ namespace zkj_stk{
         }
 
         template<class Iter>
-        _assign(Iter _first, Iter _last, true_type);
+        void _assign(Iter _first, Iter _last, true_type);
 
         template<class Iter>
-        _assign(Iter _first, Iter _last, false_type);
+        void _assign(Iter _first, Iter _last, false_type);
 
         vector<T, Alloc>& operator=(const vector<T, Alloc>& vec);
         iterator allocate_and_copy(size_t, const_iterator, const_iterator);
