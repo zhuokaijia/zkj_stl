@@ -41,15 +41,15 @@ namespace zkj_stk{
         //constructor
         vector() :start(nullptr), finish(nullptr), end_of_storage(nullptr){};
 
-        vector(size_t _n, const reference _value){
+        vector(size_t _n, const_reference _value){
             initialize(_n, _value);
         }
 
-        vector(int _n, const reference _value){
+        vector(int _n, const_reference _value){
             initialize(_n, _value);
         }
 
-        vector(long _n, const reference _value){
+        vector(long _n, const_reference _value){
             initialize(_n, _value);
         }
 
@@ -57,7 +57,7 @@ namespace zkj_stk{
             initialize(_n, T());
         }
 
-        void initialize(size_t _n, const reference _value){
+        void initialize(size_t _n, const_reference _value){
             iterator res = data_allocator::allocate(_n);
             uninitialized_fill_n(result, _n, _value);
             start = res;
@@ -89,7 +89,7 @@ namespace zkj_stk{
             }
         }
 
-        void push_back(const reference _value){
+        void push_back(const_reference _value){
             if (finish != end_of_storage){
                 construct(finish, _value);
                 ++finish;
@@ -110,7 +110,7 @@ namespace zkj_stk{
             _swap(end_of_storage, _vec.end_of_storage);
         }
 
-        void resize(size_t _n, const reference _value){
+        void resize(size_t _n, const_reference _value){
             if (_n < size()){
                 erase(start + _n, finish);
             }
@@ -153,7 +153,7 @@ namespace zkj_stk{
         }
 
         //insert
-        iterator insert(iterator _pos, const reference _value){
+        iterator insert(iterator _pos, const_reference _value){
             size_t n = _pos - begin();
             if (finish != end_of_storage&&_pos == finish){
                 construct(finish, _value);
@@ -165,6 +165,7 @@ namespace zkj_stk{
             return begin() + n;
         }
 
+        void _insert(iterator _pos, const_reference _value);
         void fill_insert(iterator _pos, size_t _n, const reference _value);
 
         //assign
