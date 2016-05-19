@@ -5,6 +5,9 @@
 
 namespace zkj_stl{
      
+    template<class T, class Alloc>
+    class simple_alloc;
+
     //list node
     template<class T>
     struct list_node{
@@ -12,6 +15,8 @@ namespace zkj_stl{
         void* next;
         T data;
     };
+
+    struct BIter_tag;
     
     template<class T>
     inline list_node<T>* 
@@ -44,7 +49,7 @@ namespace zkj_stl{
         typedef T&                  reference;
         typedef list_node<T>*       link_type;
         typedef ptrdiff_t           difference_type;
-
+        
         link_type node; `
 
         list_iterator(){ node = nullptr; }
@@ -80,10 +85,9 @@ namespace zkj_stl{
         }
     };
 
-    class simple_alloc;
-    class fl_alloc;
+    class fl_malloc;
 
-    template<class T,class Alloc=fl_alloc>
+    template<class T,class Alloc=fl_malloc>
     class list{
     public:
         typedef list_node<T>            list_nde;
@@ -99,7 +103,7 @@ namespace zkj_stl{
 
     protected:
         link_type node;
-        typedef simple_alloc<T, Alloc> list_node_allocator;
+        typedef typename simple_alloc<T,Alloc> list_node_allocator;
 
     public:
         link_type get_node()const{ return list_node_allocator::allocate(); }
@@ -160,7 +164,7 @@ namespace zkj_stl{
 
         //implement in zkj_stl_list.cpp
         void clear();
-        void remove(cosnt T&);
+        void remove(const T&);
         void unique();
         void splice(iterator, list&);
         void splice(iterator, list&, iterator);
@@ -170,6 +174,8 @@ namespace zkj_stl{
         void sort();
         void transfer(iterator, iterator, iterator);
     };
-}
+}//namespace zkj_stl
 
 #endif
+
+//mode:c++

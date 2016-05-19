@@ -5,10 +5,14 @@
 #include  <cstddef>             //for ptrdiff_t
 #include  <utility>             //for std::move
 
-namespace zkj_stk{
+namespace zkj_stl{
 
-    class simple_malloc;
+    template<class T,class Alloc>
+    class simple_alloc;
+
     class fl_malloc;
+    struct true_type;
+    struct false_type;
 
     template<class T,class Alloc=fl_malloc>
     class vector{
@@ -21,8 +25,9 @@ namespace zkj_stk{
         typedef ptrdiff_t   difference_type;
         typedef T*          iterator;
         typedef const T*    const_iterator;
+
     protected:
-        typedef simple_alloc<value_type, Alloc> data_allocator;
+        typedef simple_alloc<value_type,fl_malloc> data_allocator;
         iterator start;
         iterator finish;
         iterator end_of_storage;
@@ -37,6 +42,7 @@ namespace zkj_stk{
         const reference front()const{ return *start; }
         reference back(){ return *(finish - 1); }
         const reference back()const{ return *(finish - 1); }
+
 
         //constructor
         vector() :start(nullptr), finish(nullptr), end_of_storage(nullptr){};
@@ -166,7 +172,7 @@ namespace zkj_stk{
         }
 
         void _insert(iterator _pos, const_reference _value);
-        void fill_insert(iterator _pos, size_t _n, const reference _value);
+        void fill_insert(iterator _pos, size_t _n, const_reference _value);
 
         //assign
         void assign(size_t _n, const_reference _value);
@@ -178,14 +184,51 @@ namespace zkj_stk{
         }
 
         template<class Iter>
-        void _assign(Iter _first, Iter _last, true_type);
+        void _assign(Iter _first, Iter _last, true_type){
+            iterator cur = begin();
+            for (; cur != end, _first != _last; ++cur, ++_first){
+                *cur = *_first;
+            }
+            if (_first == _last){
+                erase(cur, end());
+            }
+            else{
+                fill_insert(end(), _last - _first, *_first);
+                for (; _first != _last; ++cur, ++_first){
+                    *cur = *_first;
+                }
+            }
+        }
+        
 
-        template<class Iter>
-        void _assign(Iter _first, Iter _last, false_type);
+        template<class T, class Alloc, class Iter>
+        void _assign(Iter _first, Iter _last, false_type){
+            iterator cur = begin();
+            for (; cur != end, _first != _last; ++cur, ++_first){
+                *cur = *_first;
+            }
+            if (_first == _last){
+                erase(cur, end());
+            }
+            else{
+                fill_insert(end(), _last - _first, *_first);
+                for (; _first != _last; ++cur, ++_first){
+                    *cur = *_first;
+                }
+            }
+        }
+
+        iterator allocate_and_copy(size_t, const_iterator, const_iterator){
+            iterator res = data_allocator::allocate(_n);
+            uninitialized_copy(_first, _last, res);
+            return res;
+        }
 
         vector<T, Alloc>& operator=(const vector<T, Alloc>& vec);
-        iterator allocate_and_copy(size_t, const_iterator, const_iterator);
+        
     };
+
+
 
 
 }//namespace zkj_Stl

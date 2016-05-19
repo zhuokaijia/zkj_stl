@@ -47,7 +47,7 @@ namespace zkj_stl{
 
     template<class T, class Distance>
     struct FIter{
-        typedef IIter_tag   Iter_type;
+        typedef FIter_tag   Iter_type;
         typedef T           value_type;
         typedef Distance    difference_type;
         typedef T*          pointer;
@@ -56,7 +56,7 @@ namespace zkj_stl{
 
     template<class T, class Distance>
     struct BIter{
-        typedef IIter_tag   Iter_type;
+        typedef BIter_tag   Iter_type;
         typedef T           value_type;
         typedef Distance    difference_type;
         typedef T*          pointer;
@@ -65,7 +65,7 @@ namespace zkj_stl{
 
     template<class T, class Distance>
     struct RIter{
-        typedef IIter_tag   Iter_type;
+        typedef RIter_tag   Iter_type;
         typedef T           value_type;
         typedef Distance    difference_type;
         typedef T*          pointer;

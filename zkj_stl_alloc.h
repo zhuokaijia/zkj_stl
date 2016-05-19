@@ -12,7 +12,7 @@
 
 namespace zkj_stl{
 
-    template<class T,class Alloc>
+    template<class T,class Alloc=fl_malloc>
     class simple_alloc{
         static T* allocate(size_t _n){
             return (0 == _n) ? 0 : static_cast<T*>(Alloc::allocate(n*sizeof(T));

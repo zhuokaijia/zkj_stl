@@ -3,7 +3,7 @@
 namespace zkj_stl{
     
 
-    template<class T,class Alloc=fl_malloc>
+    template<class T,class Alloc>
     void vector<T,Alloc>::_insert(iterator _pos, const_reference _value){
         if (finish != end_of_storage){
             construct(finish, *(finish - 1));
@@ -26,10 +26,11 @@ namespace zkj_stl{
             finish = new_finish;
             end_of_storage = start + new_size;
         }
+        return 0;
     }
 
-    template<class T,class Alloc=fl_malloc>
-    void vector<T,Alloc>::fill_insert(iterator _pos, size_t _n, const_reference _value){
+    template<class T,class Alloc>
+    void vector<T, Alloc>::fill_insert(iterator _pos, size_t _n, const_reference _value){
         if (size_t(end_of_storage - finish) >= _n) {
             T _x_copy = _value;
             const size_t elems_after = finish - _pos;
@@ -42,7 +43,7 @@ namespace zkj_stl{
             }
             else {
                 uninitialized_fill_n(finish, _n - elems_after, _x_copy);
-                _finish += _n -elems_after;
+                _finish += _n - elems_after;
                 uninitialized_copy(_pos, old_finish, finish);
                 finish += elems_after;
                 fill(_pos, old_finish, _x_copy);
@@ -57,7 +58,7 @@ namespace zkj_stl{
             new_finish = uninitialized_copy(start, _pos, new_start);
             new_finish = uninitialized_fill_n(new_finish, _n, _value);
             new_finish = uninitialized_copy(_pos, finish, new_finish);
-          
+
             destroy(start, finish);
             deallocate(start, end_of_storage - start);
             start = new_start;
@@ -66,41 +67,7 @@ namespace zkj_stl{
         }
     }
 
-    template<class T,class Alloc=fl_malloc>
-    void vector<T,Alloc>::_assign(Iter _first, Iter _last, true_type){
-        iterator cur = begin();
-        for (; cur != end, _first != _last; ++cur, ++_first){
-            *cur = *_first;
-        }
-        if (_first == _last){
-            erase(cur, end());
-        }
-        else{
-            fill_insert(end(), _last - _first, *_first);
-            for (; _first != _last; ++cur, ++_first){
-                *cur = *_first;
-            }
-        }
-    }
-
-    template<class T, class Alloc = fl_malloc>
-    void vector<T, Alloc>::_assign(Iter _first, Iter _last, false_type){
-        iterator cur = begin();
-        for (; cur != end, _first != _last; ++cur, ++_first){
-            *cur = *_first;
-        }
-        if (_first == _last){
-            erase(cur, end());
-        }
-        else{
-            fill_insert(end(), _last - _first, *_first);
-            for (; _first != _last; ++cur, ++_first){
-                *cur = *_first;
-            }
-        }
-    }
-
-    template<class T,class Alloc=fl_malloc>
+    template<class T,class Alloc>
     void vector<T,Alloc>::assign(size_t _n, const_reference _value){
         if (_n > capacity()){
             vector<T, Alloc> vec(_n, _value);
@@ -119,7 +86,7 @@ namespace zkj_stl{
         }
     }
 
-    template<class T, class Alloc = fl_malloc>
+    template<class T, class Alloc>
     vector<T, Alloc>& vector<T, Alloc>::operator=(const vector<T, Alloc>& _vec){
         if (&vec != this){
             const size_t s = vec.size();
@@ -143,13 +110,8 @@ namespace zkj_stl{
         }
         return *this;
     }
-
-    template<class T, class Alloc = fl_malloc>
-    iterator vector<T, Alloc>::allocate_and_copy(size_t _n, const_iterator _first, const_iterator _last){
-        iterator res = data_allocator::allocate(_n);
-        uninitialized_copy(_first, _last, res);
-        return res;
-    }
+    
+    
 
     
 }//namespace zkj_stl
