@@ -1,7 +1,8 @@
 #ifndef _ZKJ_STL_LIST_H_
 #define _ZKJ_STL_LIST_H_
 
-#include  <cstddef>             //for ptrdiff_t
+#include  <cstddef>     //for ptrdiff_t
+#include  <utility>
 
 namespace zkj_stl{
      
@@ -40,9 +41,8 @@ namespace zkj_stl{
     //list iterator
     template<class T>
     struct list_iterator{
-        typedef list_iterator iterator;
-        typedef list_iterator self;
-
+        typedef list_iterator       iterator;
+        typedef list_iterator       self;
         typedef BIter_tag           Iter_type;
         typedef T                   value_type;
         typedef T*                  pointer;
@@ -162,17 +162,25 @@ namespace zkj_stl{
         void pop_back(){ earse(begin()); }
         void pop_front(){ earse((--end())); }
 
+        void swap(list<T, Alloc>& _list){
+            std::swap(node, _list.node);
+        }
+
         //implement in zkj_stl_list.cpp
         void clear();
         void remove(const T&);
         void unique();
-        void splice(iterator, list&);
-        void splice(iterator, list&, iterator);
+        void splice(iterator, list<T,Alloc>&);
+        void splice(iterator, list<T,Alloc>&, iterator);
         void splice(iterator, iterator, iterator);
-        void merge(list&);
+        void merge(list<T,Alloc>&);
         void reverse();
         void sort();
         void transfer(iterator, iterator, iterator);
+
+        list<T, Alloc>& operator=(const list<T,Alloc>& _list);
+        void assign(size_t _n, const T& _value);
+        void assign(iterator _first, iterator _last);
     };
 }//namespace zkj_stl
 
